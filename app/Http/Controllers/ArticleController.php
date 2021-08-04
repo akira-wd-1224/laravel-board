@@ -2,50 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
     /**
-     * @return array
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        $articles =(object)[
 
-            (object)[
-                'id' => 1,
-                'title' => 'タイトル',
-                'body' => 'ボディ',
-                'created_at' => now(),
-                'user' => (object)[
-                    'id' => 1,
-                    'name' => 'ユーザー名１'
-                ]
-            ],
+        $articles = Article::all()->sortBy('created_at');
 
-            (object)[
-                'id' => 2,
-                'title' => 'タイトル',
-                'body' => 'ボディ',
-                'created_at' => now(),
-                'user' => (object)[
-                    'id' => 2,
-                    'name' => 'ユーザー名２'
-                ]
-            ],
-
-            (object)[
-                'id' => 3,
-                'title' => 'タイトル',
-                'body' => 'ボディ',
-                'created_at' => now(),
-                'user' => (object)[
-                    'id' => 3,
-                    'name' => 'ユーザー名３'
-                ]
-            ],
-        ];
         return view('articles.index',['articles'=>$articles]);
     }
 }
