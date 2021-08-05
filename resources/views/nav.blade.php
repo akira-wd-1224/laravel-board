@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand navbar-dark peach-gradient">
     {{--navbarでバーの表示navbar-expandでレスポンシブ対応navbar-darkは背景を黒くしてテキストを白く表示peach-gradientは背景色変更--}}
-    <a class="navbar-brand" href="/"><i class="fa fa-edit" aria-hidden="true">board</i></a>
+    <a class="navbar-brand" href="/"><i class="fa fa-edit">Board</i></a>
     {{--navbar-brandはブランドを表示--}}
     {{--navbar-navはハンバーガーメニュー--}}
     {{--ml-autoはマージンレフトのオート（右端に寄せるため）--}}
