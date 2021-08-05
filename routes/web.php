@@ -15,4 +15,6 @@
 //    return view('welcome');
 //});
 
+Auth::routes();
 Route::get('/','ArticleController@index');
+
