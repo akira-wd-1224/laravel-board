@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Article;
+use App\Http\Requests\ArticleRequest;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -24,5 +25,20 @@ class ArticleController extends Controller
     public function create()
     {
         return view('articles.create');
+    }
+
+    /**
+     * 記事の登録
+     * @param App\Http\Requests\ArticleRequest
+     * @param App\Article
+     * @return  \Illuminate\Http\RedirectResponse
+     */
+    public function store(ArticleRequest $request,Article $article)
+    {
+        $article->title = $request->title;
+        $article->body = $request->body;
+        $article->user_id = $request->user()->id;//リクエストのuserメソッドを使うことでUserクラスのインスタンスにアクセスできる
+        $article->save();//articlesテーブルにレコードが新規登録される
+        return redirect()->route('articles.index');
     }
 }
