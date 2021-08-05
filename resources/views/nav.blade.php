@@ -6,20 +6,24 @@
     {{--ml-autoはマージンレフトのオート（右端に寄せるため）--}}
     <ul class="navbar-nav ml-auto">
         {{--nav-itemは部品の構成nav-linkはリンク部品--}}
+        @guest
         <li class="nav-item">
-            <a class="nav-link" href="">ユーザー登録</a>
+            <a class="nav-link" href="{{route('register')}}">ユーザー登録</a>
         </li>
-
+        @endguest
+        @guest
         <li class="nav-item">
             <a class="nav-link" href="">ログイン</a>
         </li>
-
+        @endguest
+        @auth
         <li class="nav-item">
             <a class="nav-link" href=""><i class="fas fa-pen mr-1" aria-hidden="true"></i>投稿する</a>
         </li>
-
+        @endauth
         <!-- Dropdown -->
         {{--dropdownはdropdown-toggleやdropdown-menu、dropdown-itemを組み合わせて表示させる。aria-＊”...”は読み上げブラウザなどに付加情報を与えるもの--}}
+        @auth
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                aria-haspopup="true" aria-expanded="false">
@@ -39,8 +43,10 @@
             </div>
         </li>
         {{--レイアウトが崩れるためあえて外にフォームタグを出している--}}
-        <form id="logout-button" method="POST" action="">
+        <form id="logout-button" method="POST" action="{{route('logout')}}">
+        @csrf
         </form>
+        @endauth
         <!-- Dropdown -->
 
     </ul>
