@@ -18,7 +18,7 @@
         @endguest
         @auth
         <li class="nav-item">
-create            <a class="nav-link" href="{{route('articles.create')}}"><i class="fas fa-pen mr-1" aria-hidden="true"></i>投稿する</a>
+            <a class="nav-link" href="{{route('articles.create')}}"><i class="fas fa-pen mr-1" aria-hidden="true"></i>投稿する</a>
         </li>
         @endauth
         <!-- Dropdown -->
