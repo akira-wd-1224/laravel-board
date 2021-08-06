@@ -54,7 +54,7 @@
                                 <div class="modal-header">
                                     {{--class="close"は何かを閉じる--}}
                                     {{--data-dismiss="modal"はすべてのアクティブなモーダルを非表示。--}}
-                                    {{--aria-labelは現在の要素にラベル付けする文字列を定義するために使用。これはテキストラベルが画面に表示されない場合に使用--}}}
+                                    {{--aria-labelは現在の要素にラベル付けする文字列を定義するために使用。これはテキストラベルが画面に表示されない場合に使用--}}
                                     <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
                                         {{--area-hidden=”true”とは、スクリーンリーダーの読み上げをスキップするための指定--}}
                                         <span aria-hidden="true">&times;</span>
