@@ -61,7 +61,7 @@ class PasswordResetNotification extends Notification
                 //emailは、クエリストリング(Query String)としてURLに付加
                 'url' => route('password.reset',['token' => $this->token, 'email' => $notifiable->email,]),
                 //キーcountの値には、パスワード設定画面へのURLの有効期限(単位は分)をセット
-                'count' => config('auth.passwords.'.config('auth.defaults.passwords').'expire'),
+                'count' => config('auth.passwords.' . config('auth.defaults.passwords') . '.expire'),
                 ]);
     }
 
