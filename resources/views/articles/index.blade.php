@@ -11,7 +11,7 @@
                 <i class="fas fa-user-circle fa-3x mr-1"></i>
                 <div>
                     <div class="font-weight-bold">
-                        {{$article->name}}
+                        {{$article->user->name}}
                     </div>
                     <div class="font-weight-lighter">
                         {{$article->created_at->format('Y/m/d/ H:i')}}
