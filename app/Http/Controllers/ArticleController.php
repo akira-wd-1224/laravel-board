@@ -9,6 +9,16 @@ use App\Http\Requests\ArticleRequest;
 class ArticleController extends Controller
 {
     /**
+     * コンストラクタでauthorizeResourceを呼び出し、各アクションメソッドを処理するかしないか、ポリシーのメソッドで定義した判定条件の通りとなる。
+     * @return void
+     */
+    public function __construct()
+    {
+        //第一引数にモデル、第二引数にモデルのIDがセットされる、ルーティングのパラメータ名
+        $this->authorizeResource(Article::class,'article');
+    }
+
+    /**
      * 記事一覧画面の表示
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
