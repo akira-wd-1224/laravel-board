@@ -17,11 +17,14 @@
                         {{$article->created_at->format('Y/m/d/ H:i')}}
                     </div>
                 </div>
+            {{--ログイン中のユーザーidと記事のユーザーidを比較して一致すればメニューを表示--}}
             @if( Auth::id() === $article->user_id )
                 <!-- dropdown -->
                     <div class="ml-auto card-text">
                         <div class="dropdown">
+                                {{--data-toggleは何をさせるかを入力　aria-haspopup="true" は要素がポップアップ部品を持つことを、aria-expanded="..." はポップアップの閉塞状態--}}
                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {{--text-mutedは色--}}
                                 <button type="button" class="btn btn-link text-muted m-0 p-2">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
@@ -31,6 +34,7 @@
                                     <i class="fas fa-pen mr-1"></i>記事を更新する
                                 </a>
                                 <div class="dropdown-divider"></div>
+                                {{--data-targetはモーダルのリンク先を指定--}}
                                 <a class="dropdown-item text-danger" data-toggle="modal" data-target="#modal-delete-{{ $article->id }}">
                                     <i class="fas fa-trash-alt mr-1"></i>記事を削除する
                                 </a>
@@ -40,11 +44,19 @@
                     <!-- dropdown -->
 
                     <!-- modal -->
+                    {{--modal fadeはモーダルダイアログがフェードイン--}}
+                    {{--tabindexは要素が入力フォーカスを持てること。負の数はキーボードの順次ナビゲーションで到達できないようにする--}}
+                    {{--roleは要素に意味づけ　コンピュータに認識させやすくするためのもの--}}
+                    {{--dialogとは何かを入力させたりメッセージを確認させるために、操作の過程で一時的に開かれる小さい画面のこと--}}
                     <div id="modal-delete-{{ $article->id }}" class="modal fade" tabindex="-1" role="dialog">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    {{--class="close"は何かを閉じる--}}
+                                    {{--data-dismiss="modal"はすべてのアクティブなモーダルを非表示。--}}
+                                    {{--aria-labelは現在の要素にラベル付けする文字列を定義するために使用。これはテキストラベルが画面に表示されない場合に使用--}}
                                     <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                                        {{--area-hidden=”true”とは、スクリーンリーダーの読み上げをスキップするための指定--}}
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -54,6 +66,7 @@
                                     <div class="modal-body">
                                         {{ $article->title }}を削除します。よろしいですか？
                                     </div>
+                                    {{--justify-content-betweenはフレックスアイテムの均等配置--}}
                                     <div class="modal-footer justify-content-between">
                                         <a class="btn btn-outline-grey" data-dismiss="modal">キャンセル</a>
                                         <button type="submit" class="btn btn-danger">削除する</button>
