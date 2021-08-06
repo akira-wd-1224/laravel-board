@@ -21,6 +21,7 @@ class ArticleController extends Controller
     }
 
     /**
+     * 記事投稿画面の表示
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create()
