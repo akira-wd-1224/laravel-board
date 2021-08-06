@@ -50,6 +50,19 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-        view('articles.edit',['article'=>$article]);
+       return view('articles.edit',['article'=>$article]);
     }
+
+    /**
+     * 記事更新処理記事一覧へリダイレクト
+     * @param App\Http\Requests\ArticleRequest $request
+     * @param App\Article $article
+     * @return   Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|Illuminate\Routing\Redirector
+     */
+    public function update(ArticleRequest $request,Article $article)
+    {
+        $article->fill($request->all())->save();
+        return redirect()->route('articles.index');
+    }
+
 }
