@@ -75,4 +75,13 @@ class ArticleController extends Controller
         return redirect()->route('articles.index');
     }
 
+    /**
+     * 詳細画面表示
+     * @param Article $article
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Article $article)
+    {
+        return view('articles.show',['article'=> $article]);
+    }
 }
