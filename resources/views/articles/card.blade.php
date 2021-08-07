@@ -79,5 +79,11 @@
         <div class="card-text">
             {!! nl2br(e($article->body))!!}
         </div>
+        <div class="card-body pt-0 pb-2">
+            <div class="card-text">
+                <article-like>
+                </article-like>
+            </div>
+        </div>
     </div>
 </div>
