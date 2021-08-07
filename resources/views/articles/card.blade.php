@@ -81,7 +81,13 @@
         </div>
         <div class="card-body pt-0 pb-2">
             <div class="card-text">
-                <article-like>
+                {{--:initial-is-liked-byはv-bind:initial-is-liked-byの省略形--}}
+                {{--v-bindとは:initial-is-liked-byのような属性を動的に設定できる設定方法--}}
+                {{--@jsonはjsonのレンダといい使用することで@json（$article->isLikedBy(Auth::user())）の-}}
+                {{--結果の値からjson形式の文字列に変えて-Vueコンポーネントに渡している。--}}
+                <article-like
+                    :initial-is-liked-by="@json($article->isLikedBy(Auth::user()))"
+                >
                 </article-like>
             </div>
         </div>
