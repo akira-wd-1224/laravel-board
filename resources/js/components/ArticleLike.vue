@@ -6,7 +6,7 @@
         >
 
             <i class="fas fa-heart mr-1"
-               :class="{'red-text' :this.isLikedBy}"
+               :class="{'red-text' :this.isLikedBy , 'animated heartBeat fast':this.gotToLike}"
                @click="clickLike"
             />
         </button>
@@ -16,6 +16,7 @@
 <!--このファイルは単一ファイルコンポーネントとして扱われるのでtemplate、style、scriptを1つのVueファイルでまとめて管理する-->
 <!--:classでv-bindを使用している。プロパティを直接使わない理由は値を変化させるため-->
 <!--テンプレート内でv-on:ディレクティブ（@clickは省略形）を使うことでvueインスタンスのメソッドを呼び出すことができる-->
+<!--animated heartBeat fastはいずれもbootstrapのclass属性　-->
 <!--外部から参照されつことが前提なのでscriptの部分はexport default で囲むことが前提-->
 <!--propsはプロパティ-->
 <!--dataはオブジェクトを定義している。componentで必要な時にdata()を返すことができる。-->
@@ -52,6 +53,7 @@ this.endpointはURIのarticles/{article}/likeに対して、HTTPのPUTメソッ�
             return {
                 isLikedBy: this.initialIsLikedBy,
                 countLikes: this.initialCountLikes,
+                gotToLike: false,
             }
         },
         methods: {
@@ -70,12 +72,14 @@ this.endpointはURIのarticles/{article}/likeに対して、HTTPのPUTメソッ�
                 const response = await axios.put(this.endpoint)
                 this.isLikedBy = true
                 this.countLikes = response.data.countLikes
+                this.gotToLike = true
             },
 
             async unlike() {
                 const response = await axios.delete(this.endpoint)
                 this.isLikedBy = false
                 this.countLikes = response.data.countLikes
+                this.gotToLike = false
             },
         },
     }
