@@ -49,6 +49,7 @@ class Article extends Model
     public function getCountLikesAttribute(): int//get...Attributeアクセサとなる
     {
         //アクセサとして定義することで$article->count_likesのようにスネークケースで呼び出し可になる
+        //likesの要素の数を返す。likesのモデルのインスタンスでBelongsToManyクラスのインスタンスではない。
         return $this->likes->count();
     }
 }
