@@ -58,7 +58,7 @@ class ArticleController extends Controller
      */
     public function edit(Article $article)
     {
-       return view('articles.edit',['article'=>$article]);
+        return view('articles.edit',['article'=>$article]);
     }
 
     /**
@@ -93,5 +93,41 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         return view('articles.show',['article'=> $article]);
+    }
+
+    /**
+     * @param ArticleRequest $request
+     * @param Article $article
+     * @return array
+     */
+    public function like(ArticleRequest $request,Article $article)
+    {
+        //detachは多対多リレーションのヘルパ関数で中間テーブルへの紐付けを解除するメソッド
+        //attachも同様のヘルパ関数で中間テーブルへの紐付けをするメソッド
+        //先にdetachをする理由は二重に紐付けしないようにするため。仕様上detachでエラーになることはない。
+        //vueコンポーネントでも対策はしているが不正なリクエストを行われる可能性を考慮してサーバー側でも対策をする。
+        $article->likes()->detach($request->user()->id);
+        $article->likes()->attach($request->user()->id);
+
+        //配列を返すことでVeiwにはjson形式で変換されて渡る
+        return [
+            'id' => $article->id,//どの記事がいいねが成功したかがわかるように記事のモデルのidのレスポンスをする
+            'countLikes' => $article->count_likes,//いいね数もレスポンスする。
+        ];
+    }
+
+    /**
+     * @param ArticleRequest $request
+     * @param Article $article
+     * @return array
+     */
+    public function unlike(ArticleRequest $request,Article $article)
+    {
+        $article->likes()->detach($request->user()->id);
+
+        return [
+            'id' => $article->id,
+            'countLikes' => $article->count_likes,
+        ];
     }
 }
