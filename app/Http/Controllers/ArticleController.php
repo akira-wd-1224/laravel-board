@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Http\Requests\ArticleRequest;
+use Illuminate\Http\Request;
 
 
 class ArticleController extends Controller
@@ -96,11 +97,11 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param ArticleRequest $request
+     * @param Request $request
      * @param Article $article
      * @return array
      */
-    public function like(ArticleRequest $request,Article $article)
+    public function like(Request $request,Article $article)
     {
         //detachは多対多リレーションのヘルパ関数で中間テーブルへの紐付けを解除するメソッド
         //attachも同様のヘルパ関数で中間テーブルへの紐付けをするメソッド
@@ -117,11 +118,11 @@ class ArticleController extends Controller
     }
 
     /**
-     * @param ArticleRequest $request
+     * @param Request $request
      * @param Article $article
      * @return array
      */
-    public function unlike(ArticleRequest $request,Article $article)
+    public function unlike(Request $request,Article $article)
     {
         $article->likes()->detach($request->user()->id);
 
