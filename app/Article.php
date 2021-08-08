@@ -46,7 +46,7 @@ class Article extends Model
     /**
      * @return int
      */
-    public function getContLikesAttribute(): int//get...Attributアクセサとなる
+    public function getCountLikesAttribute(): int//get...Attributeアクセサとなる
     {
         //アクセサとして定義することで$article->count_likesのようにスネークケースで呼び出し可になる
         return $this->likes->count();
