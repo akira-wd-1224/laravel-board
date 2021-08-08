@@ -8,25 +8,47 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'title',
         'body',
     ];
 
-    public function user() :BelongsTo
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->BelongsTo('App\User');
     }
 
-    public function likes() :BelongsToMany
+    /**
+     * @return BelongsToMany
+     */
+    public function likes(): BelongsToMany
     {
         return $this->BelongsToMany('App\User','likes')->withTimestamps();
     }
 
-    public function isLikedBy(?User $user) :bool
+    /**
+     * @param User|null $user
+     * @return bool
+     */
+    public function isLikedBy(?User $user): bool
     {
         return $user
             ?(bool)$this->likes->where( 'id', $user->id)->count()
             : false;
+    }
+
+    /**
+     * @return int
+     */
+    public function getContLikesAttribute(): int//get...Attributアクセサとなる
+    {
+        //アクセサとして定義することで$article->count_likesのようにスネークケースで呼び出し可になる
+        return $this->likes->count();
     }
 }
