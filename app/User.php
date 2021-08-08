@@ -40,11 +40,11 @@ class User extends Authenticatable
     ];
 
     /**
-     * カスタマイズしたテキストメールがパスワード再設定メールとして送信される
      * @param string $token
      */
     public function sendPasswordResetNotification($token)
     {
+        //カスタマイズしたテキストメールがパスワード再設定メールとして送信される
         //作成した通知クラスである、PasswordResetNotificationクラスのインスタンスを生成し、notifyメソッドに渡す。
         $this->notify(new PasswordResetNotification($token, new BareMail()));
     }

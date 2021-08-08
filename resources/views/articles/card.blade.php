@@ -79,5 +79,21 @@
         <div class="card-text">
             {!! nl2br(e($article->body))!!}
         </div>
+        <div class="card-body pt-0 pb-2">
+            <div class="card-text">
+                {{--:initial-is-liked-byはv-bind:initial-is-liked-byの省略形--}}
+                {{--v-bindとは:initial-is-liked-byのような属性を動的に設定できる設定方法--}}
+                {{--@jsonはjsonのレンダといい使用することで@json（$article->isLikedBy(Auth::user())）の-}}
+                {{--結果の値からjson形式の文字列に変えて-Vueコンポーネントに渡している。--}}
+                {{--Auth::check()でログイン状態か確認ができて結果を論理値で返す--}}
+                {{--endpointプロパティにはroute関数で得たURLを渡している。URLは固定値なのでv-bindにする必要がない。--}}
+                <article-like
+                    :initial-is-liked-by='@json($article->isLikedBy(Auth::user()))'
+                    :initial-count-likes='@json($article->count_likes)'
+                    :authorized='@json(Auth::check())'
+                     endpoint="{{ route('articles.like',['article' => $article]) }}">
+                </article-like>
+            </div>
+        </div>
     </div>
 </div>

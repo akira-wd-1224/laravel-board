@@ -16,8 +16,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
 </head>
 <body>
+{{--このdivタグを読み込ませることでscriptタグで定義したVueのインスタンスを読み込ませることができる--}}
+<div id="app">
 @yield('content')
+</div>
 
+{{--mixメソッドを使うことでトランスパイルの都度idを採番し最新のJavascriptを読み込ませる。js/app.jsの後ろにidパラメータが付与される--}}
+{{--webpack.mix.jsに定義したversionメソッドによってidが採番される--}}
+<script src="{{ mix('js/app.js') }}"></script>
 <!-- JQuery -->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!-- Bootstrap tooltips -->
