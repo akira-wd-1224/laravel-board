@@ -86,7 +86,8 @@
                 {{--@jsonはjsonのレンダといい使用することで@json（$article->isLikedBy(Auth::user())）の-}}
                 {{--結果の値からjson形式の文字列に変えて-Vueコンポーネントに渡している。--}}
                 <article-like
-                    :initial-is-liked-by="@json($article->isLikedBy(Auth::user()))"
+                    :initial-is-liked-by='@json($article->isLikedBy(Auth::user()))'
+                    :initial-count-likes='@json($article->count_likes)'
                 >
                 </article-like>
             </div>
