@@ -17,4 +17,42 @@ class UserController extends Controller
             'user' => $user,
         ]);
     }
+
+    //引数$nameはルートから{name}の部分が渡される。{name}はフォローされる側のユーザーの名前が入る
+    public function follow(Request $request, string $name)
+    {
+        //フォローされるユーザーのモデル１件の取得。nameはユニーク制約なのでwhereで２件以上なることはない。
+        $user = User::where('name', $name)->first();
+
+        //フォローされる側のユーザーのidと、フォローのリクエストを行なったユーザーのidを比較
+        if ($user->id === $request->user()->id)
+        {
+            //tureならabort関数を使ってエラーのHTTPステータスコードをレスポンス
+            //第一引数にステータスコード。ステータスコード404は、ユーザーからのリクエストが誤っている場合などに使われるエラー
+            //第二引数にはクライアントにレスポンスするテキストを渡す（省略可能）
+            return abort('404', 'Cant follow yourself.');
+        }
+        //followingsメソッドは、多対多のリレーション(BelongsToManyクラスのインスタンス)が返る
+        //1人のユーザーがあるユーザーを複数回重ねてフォローできないようにするため削除(detach)してから新規登録(attach)
+        $request->user()->followings()->detach($user);
+        $request->user()->followings()->attach($user);
+        //非同期通信に対するレスポンス
+        //コントローラーのアクションメソッドで配列や連想配列を返すと、JSON形式に変換されてレスポンスされる
+        //どのユーザーへのフォローが成功したかがわかるようにユーザーの名前を返す
+        return ['name' => $name];
+    }
+
+    public function unfollow(Request $request, string $name)
+    {
+        $user = User::where('name', $name)->first();
+
+        if ($user->id === $request->user()->id)
+        {
+            return abort('404', 'Cannot follow yourself.');
+        }
+
+        $request->user()->followings()->detach($user);
+
+        return ['name' => $name];
+    }
 }
