@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Http\Requests\ArticleRequest;
+use App\Tag;
 use Illuminate\Http\Request;
 
 
@@ -49,6 +50,24 @@ class ArticleController extends Controller
         $article->fill($request->all());
         $article->user_id = $request->user()->id;//リクエストのuserメソッドを使うことでUserクラスのインスタンスにアクセスできる
         $article->save();//articlesテーブルにレコードが新規登録される
+        //tagsはArticleRequestで整形したのがコレクションになっている。なのでコレクションメソッドであるeach()は使用できる。
+        //each()は引数にコールバック(関数)を渡すことができ、クロージャ(無名関数)としてる。
+        //クロージャの第一引数にはコレクションの値が、第二引数にはコレクションのキーが入る。
+        //第一引数は$tagName、第二引数は今回のクロージャの中の処理で特に使わないので省略
+        //use ($article)はクロージャの中の処理で変数$articleを使うため。
+        //クロージャの中では、クロージャの外側で定義されている変数を通常使用できない。
+        //使用したい場合は、use (変数名, 変数名, ...)といったように、使う変数名を記述する必要がある。
+        $request->tags->each(function($tagName) use ($article) {
+            //タグの登録と記事・タグの紐付けを行う。
+            //記事と同時にタグを登録するには、そのタグが既にtagsテーブルに存在するタグか、全くの新規のタグかを考慮する。
+            //既にtagsテーブルに存在するタグであれば、tagsテーブルに登録する必要は無く、記事とタグの紐付けのみを行えば良い。
+            //タグの登録にはfirstOrCreateメソッドを使用し、引数として渡した「カラム名と値のペア」を持つレコードがテーブルに存在するかどうかを探し、
+            //もし存在すればそのモデルを返す。テーブルに存在しなければ、そのレコードをテーブルに保存した上で、モデルを返す。
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            //変数$tagにはタグモデルが代入され、記事とタグの紐付け(article_tagテーブルへのレコードの保存)が行われる。
+            //eachメソッドによる繰り返し処理によって、これが記事投稿画面で入力されたタグの数だけ行われる。
+            $article->tags()->attach($tag);
+        });
         return redirect()->route('articles.index');
     }
 
