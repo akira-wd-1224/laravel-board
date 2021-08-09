@@ -99,6 +99,15 @@ class ArticleController extends Controller
     public function update(ArticleRequest $request,Article $article)
     {
         $article->fill($request->all())->save();
+        //detachメソッドを引数無しで使うと、そのリレーションを紐付ける中間テーブルのレコードが全削除される
+        //記事更新画面でタグが削除された時の考慮して最初に全削除を行う。
+        $article->tags()->detach();
+        //eachメソッドは繰り返し処理　$tagNameの数繰り返される
+        $request->tags->each(function ($tagName) use ($article) {
+            //firstOrCreate()は引数である配列のペアを持つレコードに存在するかを探して無ければレコードをテーブルに保存しモデルとして返す
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $article->tags()->attach($tag);
+        });
         return redirect()->route('articles.index');
     }
 
