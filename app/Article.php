@@ -52,4 +52,8 @@ class Article extends Model
         //likesの要素の数を返す。likesのモデルのインスタンスでBelongsToManyクラスのインスタンスではない。
         return $this->likes->count();
     }
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Tag')->withTimestamps();
+    }
 }
