@@ -74,4 +74,8 @@ export default {
     border-radius: 0px;
     font-size: 13px;
 }
+/*擬似要素"#"を付ける*/
+.vue-tags-input .ti-tag::before {
+    content: "#";
+}
 </style>
