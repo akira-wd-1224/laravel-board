@@ -32,7 +32,7 @@
             {{--dropdown-menu-rightは下に出すメニューの表示位置を右に合わせる。buttonタグでの画面遷移はonclick="location.href=''"とする--}}
             <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdownMenuLink">
                 <button class="dropdown-item" type="button"
-                        onclick="location.href=''">
+                        onclick="location.href='{{route('users.show',["name" => Auth::user()->name])}}'">
                     マイページ
                 </button>
                 {{--dropdown-dividerは分割線を表示--}}
