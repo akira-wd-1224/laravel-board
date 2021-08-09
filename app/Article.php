@@ -29,6 +29,7 @@ class Article extends Model
      */
     public function likes(): BelongsToMany
     {
+        //リレーション元/先のテーブル名の単数形_idという規則性があれば第三引数と第四引数は省略可能
         return $this->BelongsToMany('App\User','likes')->withTimestamps();
     }
 
@@ -54,6 +55,7 @@ class Article extends Model
     }
     public function tags(): BelongsToMany
     {
+        //article_tagといった2つのモデル名の単数形をアルファベット順に結合した名前なので、第二引数は省略可
         return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 }
