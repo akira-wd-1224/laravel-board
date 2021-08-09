@@ -28,10 +28,18 @@ export default {
     components: {
         VueTagsInput,
     },
+    //Bladeから渡されたタグ情報は、プロパティinitialTagsで受け取る。
+    props: {
+        initialTags: {
+            type: Array,
+            default: [],
+        },
+    },
+    //プロパティinitialTagsの値をデータtagsの初期値としてセット
     data() {
         return {
             tag: '',
-            tags: [],
+            tags: this.initialTags,
             autocompleteItems: [{
                 text: 'Spain',
             }, {
