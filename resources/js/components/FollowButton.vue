@@ -15,11 +15,17 @@
 
 <script>
     export default {
+        props: {
+            initialIsFollowedBy: {
+                type: Boolean,
+                default: false,
+            }
+        },
         //データisFollowdByで、このボタンを表示しているユーザーページのユーザーを、
         //ログイン中のユーザーがフォローしているのか、フォローしていないのかを管理
         data() {
             return {
-                isFollowedBy: false,
+                isFollowedBy: this.initialIsFollowedBy,
             }
         },
         computed: {
