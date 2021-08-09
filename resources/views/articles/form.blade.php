@@ -11,7 +11,7 @@ ArticleTagsInputコンポーネントに渡せるように考慮。$allTagName�
 もしnullが発生した状態を想定して画面は表示できるけれど自動補完がされない状態にする。--}}
     <article-tags-input
         :initial-tags='@json($tagNames ?? [])'
-        :autocomplete-items='@json($allTagName ?? [])'
+        :autocomplete-items='@json($allTagNames ?? [])'
     >
     </article-tags-input>
 </div>
