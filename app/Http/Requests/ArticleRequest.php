@@ -27,6 +27,8 @@ class ArticleRequest extends FormRequest
         return [
             'title' => ['required','max:50'],
             'body' => ['required','max:500'],
+            //rulesメソッド内にjsonを指定し、JSON形式かどうかのバリデーションを行う
+            'tags' => 'json|regex:/^(?!.*\s).+$/u|regex:/^(?!.*\/).*$/u',
         ];
     }
 
