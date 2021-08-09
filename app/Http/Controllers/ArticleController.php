@@ -39,7 +39,10 @@ class ArticleController extends Controller
         $allTagNames = Tag::all()->map(function ($tag) {
             return ['text' => $tag->name];
         });
-        return view('articles.create',['allTagNames'=>$allTagNames]);
+
+        return view('articles.create', [
+            'allTagNames' => $allTagNames,
+        ]);
     }
 
     /**
@@ -88,14 +91,13 @@ class ArticleController extends Controller
         });
 
         $allTagNames = Tag::all()->map(function ($tag) {
-            return ['name' => $tag->name];
+            return ['text' => $tag->name];
         });
 
         return view('articles.edit',[
             'article' => $article,
             'tagNames' => $tagNames,
             'allTagNames' => $allTagNames,
-
         ]);
     }
 
