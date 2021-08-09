@@ -25,4 +25,6 @@ Route::prefix('articles')->name('articles.')->group(function(){
 });
 //第一引数に{name}とするとTagControllerのアクションメソッドで、引数$nameを受け取ることができる
 Route::get('/tags/{name}','TagController@show')->name('tags.show');
-
+Route::prefix('users')->name('users.')->group( function () {
+    Route::get('/{name}','UserController@show')->name('show');
+});
