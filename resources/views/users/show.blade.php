@@ -11,6 +11,14 @@
                     <a href="{{route('users.show',['name' => $user->name])}}" class="text-dark">
                         <i class="fas fa-user-circle fa-3x"></i>
                     </a>
+{{--自分自身をフォローできないようする。なのでログイン中のユーザーのidと、ユーザーページに表示されるユーザーのidを比較して
+不一致の場合のみフォローボタンを表示--}}
+                    @if( Auth::id() !== $user->id)
+                        <follow-button
+                            class="ml-auto"
+                        >
+                        </follow-button>
+                    @endif
                 </div>
                 <h2 class="h5 card-title m-0">
                     <a href="{{route('users.show',['name' => $user->name])}}" class="text-dark">
