@@ -11,11 +11,13 @@
 <!--v-modelで双方向データバイディング-->
 <!--プレースホルダとは、実際の内容を後から挿入するために、とりあえず仮に確保した場所のこと。
 VueTagInputのプレイスホルダー(placeholder)は、デフォルトでは"Add Tag"。"タグを5個まで入力できます"にカスタマイズ-->
+<!--:add-on-keyは確定キーをカスタマイズするために定義13はエンターキー32はスペースキー。番号はjsのキーコードで決められている-->
         <vue-tags-input
             v-model="tag"
             :tags="tags"
             placeholder="タグを5個まで入力できます"
             :autocomplete-items="filteredItems"
+            :add-on-key="[13, 32]"
             @tags-changed="newTags => tags = newTags"
         />
     </div>
