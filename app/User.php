@@ -6,6 +6,7 @@ use App\Mail\BareMail;
 use App\Notifications\PasswordResetNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -50,6 +51,17 @@ class User extends Authenticatable
         $this->notify(new PasswordResetNotification($token, new BareMail()));
     }
 
+    /**
+     * @return HasMany
+     */
+    public function articles(): hasMany
+    {
+        return $this->hasMany('App\Article');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
     public function followers(): BelongsToMany
     {
         //belongsToManyメソッドの第三引数と第四引数は省略せずに記述。リレーション元/先のテーブル名の単数形_idという規則性がないため。
