@@ -81,6 +81,13 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    /**
+     * @return BelongsToMany
+     */
+    public function likes(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Article', 'likes')->withTimestamps();
+    }
 
     /**
      * @param User|null $user
