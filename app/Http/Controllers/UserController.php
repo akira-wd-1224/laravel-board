@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    /**
+     * @param string $name
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function show(string $name)
     {
         //nameはユニーク制約なのでwhereを使用しても最大１件しか取得できない。
@@ -18,6 +22,11 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @param string $name
+     * @return string[]|void
+     */
     //引数$nameはルートから{name}の部分が渡される。{name}はフォローされる側のユーザーの名前が入る
     public function follow(Request $request, string $name)
     {
@@ -42,6 +51,11 @@ class UserController extends Controller
         return ['name' => $name];
     }
 
+    /**
+     * @param Request $request
+     * @param string $name
+     * @return string[]|void
+     */
     public function unfollow(Request $request, string $name)
     {
         $user = User::where('name', $name)->first();
