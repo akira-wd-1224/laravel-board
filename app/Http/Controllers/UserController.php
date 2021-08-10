@@ -16,9 +16,11 @@ class UserController extends Controller
         //nameはユニーク制約なのでwhereを使用しても最大１件しか取得できない。
         //whereはコレクションを返すのでfirstを使用し１件分のモデルを取得し$userに代入
         $user = User::where('name', $name)->first();
+        $articles = $user->articles->sortBy('created_at');
         //Viewメソッドでブレードを指定し、モデルが入った$userを渡す
         return view('users.show', [
             'user' => $user,
+            'articles' => $articles,
         ]);
     }
 
