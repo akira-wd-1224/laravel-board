@@ -74,4 +74,21 @@ class User extends Authenticatable
             : false;
 
     }
+
+    /**
+     * @return int
+     */
+    public function getCountFollowersAttribute(): int
+    {
+        return $this->followers->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountFollowingsAttribute(): int
+    {
+        return $this->followings->count();
+    }
+
 }
