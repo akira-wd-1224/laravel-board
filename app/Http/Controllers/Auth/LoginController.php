@@ -37,4 +37,20 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * @param string $provider
+     * @return mixed
+     */
+    //Socialiteのdirverメソッドに、外部のサービス名を渡す
+    //つまり、
+    //「Googleでログインボタン」を押す
+    //localhost/login/googleにアクセスする(GETリクエストする)
+    //redirectToProviderアクションメソッドが実行される
+    //Googleのアカウント選択画面へリダイレクトされる
+    //という流れ
+    public function redirectToProvider(string $provider)
+    {
+        return Socialite::driver($provider)->redirect();
+    }
 }
