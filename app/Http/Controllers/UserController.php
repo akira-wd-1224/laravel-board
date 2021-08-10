@@ -15,7 +15,11 @@ class UserController extends Controller
     {
         //nameはユニーク制約なのでwhereを使用しても最大１件しか取得できない。
         //whereはコレクションを返すのでfirstを使用し１件分のモデルを取得し$userに代入
-        $user = User::where('name', $name)->first();
+        $user = User::where('name', $name)->first()
+            //ユーザーモデルのリレーション先の記事(投稿した記事)の、さらにリレーション先の、記事を投稿したユーザー
+            //記事にいいねしたユーザー,記事に付けられたタグををEagerロードする。
+            //.区切りを使って、リレーション先の、さらにリレーション先をEagerロードできる。
+            ->load(['articles.user', 'articles.likes', 'articles.tags']);
         $articles = $user->articles->sortBy('created_at');
         //Viewメソッドでブレードを指定し、モデルが入った$userを渡す
         return view('users.show', [
@@ -30,9 +34,9 @@ class UserController extends Controller
      */
     public function likes(string $name)
     {
-        $user = User::where('name', $name)->first();
+        $user = User::where('name', $name)->first()
+            ->load(['likes.user', 'likes.likes', 'likes.tags']);
         $articles = $user->likes->sortBy('created_at');
-
         return view('users.likes', [
             'user' => $user,
             'articles' => $articles,
@@ -45,8 +49,9 @@ class UserController extends Controller
      */
     public function followings(string $name)
     {
-        $user = User::where('name', $name)->first();
-
+        $user = User::where('name', $name)->first()
+            //ユーザーモデルのリレーション先のフォロー中ユーザーの、さらにリレーション先の、フォロワーをEagerロード
+            ->load('followings.followers');
         $followings = $user->followings->sortByDesc('created_at');
 
         return view('users.followings', [
@@ -61,8 +66,8 @@ class UserController extends Controller
      */
     public function followers(string $name)
     {
-        $user = User::where('name', $name)->first();
-
+        $user = User::where('name', $name)->first()
+            ->load('followers.followers');
         $followers = $user->followers->sortByDesc('created_at');
 
         return view('users.followers', [

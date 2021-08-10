@@ -26,7 +26,11 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::all()->sortBy('created_at');
+        //1回のSQLで、各記事に紐付くユーザー情報を全て取得する。こうしたデータ取得方法を、LaravelではEagerロードという。
+        //その中でもloadメソッドは、遅延Eagerロード(Lazy Eager Loading)と呼ばれる
+        //loadメソッドの引数には、複数のリレーション名を配列で渡すこともできる
+        $articles = Article::all()->sortBy('created_at')
+            ->load(['user', 'likes', 'tags']);
         return view('articles.index',['articles'=>$articles]);
     }
 
