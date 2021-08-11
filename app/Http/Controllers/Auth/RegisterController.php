@@ -97,4 +97,37 @@ class RegisterController extends Controller
             'token' => $token,
         ]);
     }
+
+    /**
+     * @param Request $request
+     * @param string $provider
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|mixed
+     */
+    public function registerProviderUser(Request $request, string $provider)
+    {
+        //バリデーションの実施
+        $request->validate([
+            'name' => ['required', 'string', 'alpha_num', 'min:3', 'max:16', 'unique:users'],
+            'token' => ['required', 'string'],
+        ]);
+        //リクエストからトークンを取得
+        $token = $request->token;
+        //トークンを使ってGoogleからユーザー情報を再取得
+        $providerUser = Socialite::driver($provider)->userFromToken($token);
+        //ユーザーモデルの作成と保存
+        //createメソッドを使って、ユーザーモデルのインスタンスを作成
+        $user = User::create([
+            'name' => $request->name,//リクエストパラメーターのname
+            'email' => $providerUser->getEmail(),//トークンを使ってGoogleのAPIから取得したユーザー情報のメールアドレス
+            'password' => null,//パスワード登録不要とするので、一律null
+        ]);
+        //RegistersUsersトレイトのregisterメソッド内のコードを参考
+        //登録したユーザー情報で、ログイン済みの状態。第２引数にtrueとしログアウト操作をしない限り、ログイン状態が維持される。
+        $this->guard()->login($user, true);
+        //registeredメソッド内で何か処理が定義してあれば、その結果を返す
+        //registeredメソッド内で何も処理が定義していなければ、redirectPathメソッドで定義されたパス(URL)へリダイレクトする
+        //RegistersUsersトレイトのregisteredメソッドは//と、コメントだけあり、何の処理していない
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
+    }
 }
