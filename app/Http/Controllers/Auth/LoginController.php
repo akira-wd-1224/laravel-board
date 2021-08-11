@@ -58,7 +58,11 @@ class LoginController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-
+    /**
+     * @param Request $request
+     * @param string $provider
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     */
     public function handleProviderCallback(Request $request, string $provider)
     {
         //Socialite::driver($provider)->stateless()->user()により、Laravel\Socialite\Two\Userというクラスのインスタンスを取得
