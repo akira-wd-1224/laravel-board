@@ -30,6 +30,9 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::table('articles', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->foreign('user_id')->references('id')->on('users');
+        });
     }
 }
