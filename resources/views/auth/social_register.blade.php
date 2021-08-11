@@ -24,9 +24,10 @@
                                 </div>
                                 <div class="md-form">
                                     <label for="email">メールアドレス</label>
+                                    {{--disalbled属性は入力・変更不可。登録するメールアドレスは、Googleアカウントから取得したメールアドレスである--}}
                                     <input class="form-control" type="text" id="email" name="email" value="{{ $email }}" disabled>
                                 </div>
-                                <button class="btn btn-block blue-gradient mt-2 mb-2" type="submit">ユーザー登録</button>
+                                <button class="btn btn-block peach-gradient mt-2 mb-2" type="submit">ユーザー登録</button>
                             </form>
                         </div>
                     </div>
