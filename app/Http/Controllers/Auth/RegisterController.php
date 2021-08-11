@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Socialite\Facades\Socialite;
 
 class RegisterController extends Controller
 {
@@ -68,6 +70,31 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $provider
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    //トークンを使ってGoogleからユーザー情報を再取得
+    public function showProviderUserRegistrationForm(Request $request, string $provider)
+    {
+        //リクエストのパラメータは、Illuminate\Http\Requestクラスのインスタンスである$requestがプロパティとして持っている
+        //LoginContorollerでprovider, email, tokenとパラメータが渡されている
+        //そのため、$request->tokenにより、tokenの値が取得できる。変数$tokenに代入
+        $token = $request->token;
+        //Socialite::driver($provider)->userFromToken($token)により、Laravel\Socialite\Two\Userクラスのインスタンスを取得
+        //userFromTokenメソッドでは、Googleから発行済みのトークンを使って、GoogleのAPIに再度ユーザー情報の問い合わせを行い
+        //その問い合わせにより取得したユーザー情報は、いったん変数$providerUserに代入
+        $providerUser = Socialite::driver($provider)->userFromToken($token);
+        //ユーザー名登録画面のビューの表示
+        //このBladeにはプロバイダー名('google')、Googleから取得したメールアドレス、Googleが発行したトークンを渡す
+        return view('auth.social_register', [
+            'provider' => $provider,
+            'email' => $providerUser->getEmail(),
+            'token' => $token,
         ]);
     }
 }
