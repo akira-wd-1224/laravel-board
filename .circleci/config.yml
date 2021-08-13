@@ -29,13 +29,13 @@ jobs:
           key: composer-v1-{{ checksum "composer.lock" }}
           #保存するディレクトリ名やファイル名はpathsに指定
           path:
-            - vender
+            - vendor
       #npm ciはnpm installと違い package-lock.json から node_modules ディレクトリを構築
       #restore_cacheは復元
       - restore_cache:
           #npmによってインストールされたパッケージのキャッシュであることがわかるようにするため、先頭にnpm
           #package-lock.jsonでは、npmによってインストールされた各パッケージのバージョンが、依存パッケージも含め管理される
-          key: npm-v1-{{ checksum "package-lock.json"}}
+          key: npm-v1-{{ checksum "package-lock.json" }}
       - run:
           name: npm ci
           #複数行に渡ってコマンドを記述する時は、まず最初に|を記述
