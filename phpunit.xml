@@ -21,7 +21,13 @@
         <server name="APP_ENV" value="testing"/>
         <server name="BCRYPT_ROUNDS" value="4"/>
         <server name="CACHE_DRIVER" value="array"/>
+        <!--laravelはデフォルトでsqliteが使用される-->
         <server name="DB_CONNECTION" value="sqlite"/>
+        <!--データベースの保存先として:memory:が指定されている-->
+        <!--ストレージ(SSDなど)ではなく読み書きが高速なインメモリが使用される-->
+        <!--テストは実行の都度、空のデータベースにテーブルを作り必要であればそれらテーブルに初期データを投入し、-->
+        <!--各テストを実行する(テストの内容次第では、さらにデータを新規作成することもありうる)という流れをとるのが一般的-->
+        <!--.envファイルでPostgreSQLを使う設定だがテスト実行時はphpunit.xml内で設定した環境変数が優先される-->
         <server name="DB_DATABASE" value=":memory:"/>
         <server name="MAIL_DRIVER" value="array"/>
         <server name="QUEUE_CONNECTION" value="sync"/>

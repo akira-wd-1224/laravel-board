@@ -39,6 +39,8 @@ class Article extends Model
      */
     public function isLikedBy(?User $user): bool
     {
+//動的プロパティlikesを使用することで、Articleモデルから
+//likesテーブル経由で紐付くUserモデルが、コレクション(配列を拡張したもの)で返る
         return $user
             ?(bool)$this->likes->where( 'id', $user->id)->count()
             : false;
