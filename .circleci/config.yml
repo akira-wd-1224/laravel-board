@@ -28,7 +28,7 @@ jobs:
           #その結果、restore_cacheでは、保存済みのキャッシュ(vendorディレクトリ)が復元されることはない
           key: composer-v1-{{ checksum "composer.lock" }}
           #保存するディレクトリ名やファイル名はpathsに指定
-          path:
+          paths:
             - vendor
       #npm ciはnpm installと違い package-lock.json から node_modules ディレクトリを構築
       #restore_cacheは復元
