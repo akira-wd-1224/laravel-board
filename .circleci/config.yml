@@ -24,12 +24,32 @@ jobs:
           #そんな時のために、あらかじめv1といった部分を名前に含めている
           #{{ checksum "composer.lock" }}という部分は、CircleCIのテンプレート機能を使用としてる
           #{{ checksum "ファイル名" }}とすることで、ファイルをハッシュ化した値を算出
+          #もし、composer.lockに変更があれば、算出されるハッシュ値も異なったものとなり、キャッシュのkeyとして違った名前になり
+          #その結果、restore_cacheでは、保存済みのキャッシュ(vendorディレクトリ)が復元されることはない
           key: composer-v1-{{ checksum "composer.lock" }}
           #保存するディレクトリ名やファイル名はpathsに指定
           path:
             - vender
       #npm ciはnpm installと違い package-lock.json から node_modules ディレクトリを構築
-      - run: npm ci
+      #restore_cacheは復元
+      - restore_cache:
+          #npmによってインストールされたパッケージのキャッシュであることがわかるようにするため、先頭にnpm
+          #package-lock.jsonでは、npmによってインストールされた各パッケージのバージョンが、依存パッケージも含め管理される
+          key: npm-v1-{{ checksum "package-lock.json"}}
+      - run:
+          name: npm ci
+          #複数行に渡ってコマンドを記述する時は、まず最初に|を記述
+          #ifを逆さまに記述したfiは、if文の終わりを示す。[]は必須
+          #[の直後と、]の直前にはそれぞれスペースが必須。!は、NOT条件
+          #node_modulesというディレクトリが存在すればfalseを、存在しなければtrueを返す
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            fi
+      - save_cache:
+          key: npm-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
       #JavaScriptのトランスパイル
       - run: npm run dev
       - run:
