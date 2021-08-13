@@ -4,5 +4,21 @@ jobs:
     docker:
       - image: circleci/php:7.3-node-browsers
     steps:
-      - run: echo "Hello World"
-      
+      #checkoutは、GitHubからCircleCIの環境にソースコードをコピー(git clone)
+      - checkout
+      #sudoは他のユーザーの権限で実行するときのコマンドでオプションと実行するコマンドを組み合わせる
+      #composer self-update --1はバージョン1の最新stable（安定版）にアップデート
+      #バージョン1にする理由はcircleciのdocker imageがバージョン指定してインストールされていないため
+      - run: sudo composer self-update --1
+      #composer.jsonに記録されているパッケージを、composer.lockに記録されているバージョンでインストール
+      #-nは--no-interactionの略で対話形式にしないようにするコマンド
+      #--prefer-dist zip形式でダウンロードする(高速)　書かなくてもdistがデフォルト
+      - run: composer install -n --prefer-dist
+      #npm ciはnpm installと違い package-lock.json から node_modules ディレクトリを構築
+      - run: npm ci
+      #JavaScriptのトランスパイル
+      - run: npm run dev
+      - run:
+          name: php test
+          command: vendor/bin/phpunit
+
