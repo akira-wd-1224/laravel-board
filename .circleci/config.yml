@@ -10,10 +10,24 @@ jobs:
       #composer self-update --1はバージョン1の最新stable（安定版）にアップデート
       #バージョン1にする理由はcircleciのdocker imageがバージョン指定してインストールされていないため
       - run: sudo composer self-update --1
+      #保存されたキャッシュを復元する
+      - restore_cache:
+          #keyには、復元するキャッシュの名前を指定
+          key: composer-v1-{{ checksum "composer.lock" }}
       #composer.jsonに記録されているパッケージを、composer.lockに記録されているバージョンでインストール
       #-nは--no-interactionの略で対話形式にしないようにするコマンド
       #--prefer-dist zip形式でダウンロードする(高速)　書かなくてもdistがデフォルト
       - run: composer install -n --prefer-dist
+      #save_cacheでは、keyに指定した名前でキャッシュを保存
+      - save_cache:
+          #キャッシュを無視して、新たにキャッシュを保存し直したい時はkeyに指定する名前の変更が必要
+          #そんな時のために、あらかじめv1といった部分を名前に含めている
+          #{{ checksum "composer.lock" }}という部分は、CircleCIのテンプレート機能を使用としてる
+          #{{ checksum "ファイル名" }}とすることで、ファイルをハッシュ化した値を算出
+          key: composer-v1-{{ checksum "composer.lock" }}
+          #保存するディレクトリ名やファイル名はpathsに指定
+          path:
+            - vender
       #npm ciはnpm installと違い package-lock.json から node_modules ディレクトリを構築
       - run: npm ci
       #JavaScriptのトランスパイル
