@@ -4,13 +4,13 @@ jobs:
     docker:
       - image: circleci/php:7.3-node-browsers
       #image tagは開発環境に合わせる必要がある
-      - image: circleci/postgress:11.6-alpine
-        ##PostgreSQLのコンテナに対する環境変数
-        environment:
-          POSTGRES_DB: laravel
-          POSTGRES_USER: default
-          POSTGRES_PASSWORD: secret
-    #buildジョブ全体に適用される環境変数
+      - image: circleci/postgres:11.6-alpine
+          #PostgreSQLのコンテナに対する環境変数
+          environment:
+            POSTGRES_DB: laravel
+            POSTGRES_USER: default
+            POSTGRES_PASSWORD: secret
+      #buildジョブ全体に適用される環境変数
     environment:
       APP_ENV: testing
       DB_CONNECTION: pgsql
