@@ -14,7 +14,7 @@ jobs:
     environment:
       APP_ENV: testing
       DB_CONNECTION: pgsql
-      DB_HOST: postgres
+      DB_HOST: localhost
       DB_PORT: 5432
       DB_DATABASE: laravel
       DB_USERNAME: default
