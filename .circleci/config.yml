@@ -93,4 +93,56 @@ jobs:
           command: |
             mkdir tests/Unit
             vendor/bin/phpunit
+  #CircleCIの各ジョブは環境として独立している。ジョブが開始すると環境が構築され、終了すると廃棄される使い捨てである。
+  #そのためbuildジョブの環境で作成したファイルを何もせずに利用することはできない。
+  #環境間で受け渡しをする仕組みはpersist_to_workspaceという
+  deploy:
+    #環境があれば独立しているため再度dockerのimageを指定する
+    #deployジョブではPHPやNode.jsを使用しない。他のdockerを使用してもよいが特に変更する理由もないので実績のあるものを使用する
+    docker:
+      - image: circleci/php:7.3-node-browsers
+    steps:
+      #CircleCIで設定したSSH秘密鍵をCircleCI上で使用できるようになる
+      - add_ssh_keys
+      - run:
+          name: deploy
+          #1 SSHでログイン　""の中はEC2インスタンス内で行いたいコマンドを入力　\は改行しても１つのコマンドとしてつなげる際に使用
+          #-o StrictHostKeyChecking=noは初めてSSHログインしようとした時のメッセージを表示させなくするオプション
+          #-t　オプションを使うと、SSHログイン先のサーバーで実行したコマンドの結果が表示される
+          #webapp@${HOST_NAME}　ユーザー名と接続先のホスト名(あるいはIPアドレス)を指定
+          #秘密鍵を指定する-iをしていないがログイン可能　理由としてCircleCIのadd_ssh_keysコマンドでは、秘密鍵をssh-agentというものに登録しているため
+          #ssh-agentとは公開鍵認証を代行してくれる。そのため、ホストからホストへ渡り歩いてく場合でも、エージェントが認証処理を行なってくれる
+          #php artisan migrate --forceは　.envファイルの環境変数APP_ENVにproduction(本番環境)を設定している場合、php artisan migrateで確認メッセージが表示される
+          #--forceオプションを付けると、この確認メッセージは表示されなくなる。CircleCIからの実行では確認メッセージにyesと入力できない
+          #php artisan config:cacheはLaravelの全設定ファイルを一つのファイルにまとめ、ファイルアクセス効率を高めている
+          #Laravelを本番環境で稼働させる場合に、使用することが推奨されているコマンド
+          command: |
+            ssh -o StrictHostKeyChecking=no -t webapp@${HOST_NAME} "cd laravel && \
+              git pull origin main && \
+              composer install -n --no-dev --prefer-dist && \
+              npm ci && \
+              npm run prod && \
+              php artisan migrate --force && \
+              php artisan config:cache"
+  #workflowsでは各ジョブの開始条件を定義
+  workflows:
+    #versionは2を指定
+    version: 2
+    #build_deployの部分は、ワークフローの名前　どんな名前でもおｋだが２つのワークフローがあるため繋げて使用する
+    build_deploy:
+      #各ジョブの開始条件を定義
+      jobs:
+        - build
+        - deploy:
+            #requiresでは、そのジョブが開始するにあたり、正常終了している必要のあるジョブを指定
+            requires:
+              - build
+            #fileters, branches, onlyと指定することで、特定のブランチへのプッシュの時のみ、ジョブが動く
+            #実際のケースとしては、PRを立てた開発ブランチが、mainブランチにマージされた(マージコミットがプッシュされた)時
+            filters:
+              branches:
+                only:
+                  - main
+
+
 
